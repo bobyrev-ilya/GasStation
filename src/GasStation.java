@@ -24,7 +24,6 @@ public class GasStation {
                 throw new Exception("Неверный код операции");
         }
         System.out.println(parameterInputMessage);
-        String consoleParam = console.nextLine();
         console.useDelimiter("\n");
         for (int i = 0; i < params.length-1; i++) {
             params[i] = console.next();
