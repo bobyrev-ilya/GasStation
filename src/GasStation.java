@@ -8,11 +8,11 @@ public class GasStation {
     private Map<Integer, UserRequest> userAction = new HashMap<>();
 
     public GasStation(UserInterface terminal) {
-        this.terminal = terminal;
+        GasStation.terminal = terminal;
         initActionPool();
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Driver driver = new Driver("Ivanov", "123456");
         new GasStation(new GasTerminal()).startService(driver);
     }
