@@ -1,21 +1,34 @@
-import java.util.Scanner;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GasStation {
-    public static void main(String[] args) throws Exception {
-        new InfoMessage("Введите код операции: 1 - заправить; 2 - оплатить.").printMessage();
-        Scanner console = new Scanner(System.in);
-        int operationCode = console.nextInt();
-        startService(operationCode, console);
-        console.close();
+
+    protected static UserInterface terminal;
+    private Map<Integer, UserRequest> userAction = new HashMap<>();
+
+    public GasStation(UserInterface terminal) {
+        this.terminal = terminal;
+        initActionPool();
     }
-    public static void startService(int operationCode, Scanner console) throws Exception {
-        InfoMessage processMessage = new InfoMessage("Введите номер колонки и");
-        processMessage.printMessage(operationCode);
-        String [] params = new String[3];
-        for (int i = 0; i < params.length-1; i++) {
-            params[i] = console.next();
+
+    public static void main(String[] args) throws Exception {
+        Driver driver = new Driver("Ivanov", "123456");
+        new GasStation(new GasTerminal()).startService(driver);
+    }
+
+    public void startService(Driver driver) {
+        terminal.showMenu(driver);
+        UserRequest selectedRequest = userAction.get(terminal.readMessage());
+        if (selectedRequest == null) {
+            throw new IllegalArgumentException("Неверный код операции");
         }
-        processMessage.printMessage(params);
+        selectedRequest.start();
+    }
+
+    private void initActionPool() {
+        userAction.put(1, new RefuelRequest(Actions.REFUEL.getDescription()));
+        userAction.put(2, new PaymentRequest(Actions.PAYMENT.getDescription()));
     }
 }
 
